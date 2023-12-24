@@ -45,7 +45,6 @@ def getFirstATagHrefValue(today):
     url = os.getenv("CRAWLING_URL")
     driver = initBrowser()
     driver.get(url)
-    # time.sleep(2)
     hrefValue = None
     try:
         wait = WebDriverWait(driver, 20)
