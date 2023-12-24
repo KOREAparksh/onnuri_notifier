@@ -46,21 +46,28 @@ def getFirstATagHrefValue(today):
     driver = initBrowser()
     driver.get(url)
     hrefValue = None
+    flag = True
     try:
+        # firstATags = driver.find_elements(By.XPATH, '//div[@class="text_area___UrFH"]')
         wait = WebDriverWait(driver, 20)
-        firstATag = wait.until(EC.presence_of_element_located((By.XPATH, '//div[@id="contentslist_block"]//a[1]')))
-        title = firstATag.find_element(By.XPATH, '//div[@class="text_area___UrFH"]//strong[1]')
-        title = title.text
-        title = title.replace(" ", "")
-        title = title.strip()
-        
-        print("타이틀 값:", title)
-        if (title.find(today+"오늘의점심") == -1):
-            print("오늘 포스트가 아닙니다.")
-            raise Exception("오늘 포스트가 아닙니다.") 
-        
-        print("첫 번째 a 태그의 href 속성 값:", firstATag.get_attribute("href"))
-        hrefValue = firstATag.get_attribute("href")
+        divs = wait.until(EC.visibility_of_all_elements_located((By.XPATH, '//div[@class="text_area___UrFH"]')))
+        print("divs: ", type(divs))
+        for div in divs:
+            title = div.find_element(By.XPATH, '//strong[1]')
+            title = div.text
+            title = title.replace(" ", "")
+            title = title.strip()
+            print("타이틀 값:", title)
+            if (title.find(today+"오늘의점심") != -1):
+                continue
+            flag = False
+            aTag = div.find_element(By.TAG_NAME, 'a')
+            print("첫 번째 a 태그의 href 속성 값:", aTag.get_attribute("href"))
+            hrefValue = aTag.get_attribute("href")
+            break
+        if (flag == True):
+            print("오늘 포스트가 없습니다.")
+            raise Exception("오늘 포스트가 없습니다.") 
     except Exception as e:
         print("error: ", e)
     finally:

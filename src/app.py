@@ -14,7 +14,7 @@ def app(slackToken, channel, date):
     # 블로그 홈에서 오늘 포스트의 url을 가져옴
     hrefValue = crawling.getTodayPostUrl(date)
     if hrefValue == None:
-        slack.sendSlackErrorMessage("오늘 포스트가 올라오지 않은 것 같아요. 홈페이지를 확인하세요", slackToken , channel)
+        slack.sendSlackErrorMessage("오늘 포스트가 올라오지 않은 것 같아요. 홈페이지를 확인해보세요", slackToken , channel)
         sys.exit()
     
     # 블로그에서 게시글 내 이미지들의 url을 가져옴
