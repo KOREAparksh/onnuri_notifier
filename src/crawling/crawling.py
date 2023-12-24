@@ -55,7 +55,7 @@ def getFirstATagHrefValue(today):
         title = title.strip()
         
         print("타이틀 값:", title)
-        if (title.find(today) == -1):
+        if (title.find(today+"오늘의점심") == -1):
             print("오늘 포스트가 아닙니다.")
             raise Exception("오늘 포스트가 아닙니다.") 
         
@@ -113,3 +113,5 @@ def getImageUrls(hrefValue) :
 # if (titleText.find(today) == -1):
 #     print("오늘 포스트가 아닙니다.")
 #     raise Exception("오늘 포스트가 아닙니다.") 
+
+# AWS에서 실행되는지 보면 됨 그리고 회사 슬랙에 설치
