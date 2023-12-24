@@ -2,68 +2,27 @@ import sys
 import os
 
 import crawling
-import imageParser
 import slack
 
-def app(slackToken, channel, date1, date2):
+def app(slackToken, channel, date):
      # 매개변수 확인
-    if len(sys.argv) != 2:
-        slack.sendSlackErrorMessage("매개변수 문제로 프로그램이 종료되었습니다.(Not found argument)", slackToken , channel)
-        print("매개변수 하나 지정해서 넣으소")
+    if  len(sys.argv) != 3:
+        # slack.sendSlackErrorMessage("매개변수 문제로 프로그램이 종료되었습니다.(Not found argument)", slackToken , channel)
+        print("매개변수는 os환경 별 숫자(0: mac, 1: mac arm, 2: linux)와 이미지저장경로를 입력해주세요.")
         sys.exit()
-        
-    menuTimeFlag = sys.argv[1]
     
-    if (menuTimeFlag != '0' and menuTimeFlag != '1' and menuTimeFlag != '2')  :
-        slack.sendSlackErrorMessage("매개변수 문제로 프로그램이 종료되었습니다. (Invalid argument)", slackToken , channel)
-        print("매개변수 0, 1, 2 중에 넣으소")
+    # 블로그 홈에서 오늘 포스트의 url을 가져옴
+    hrefValue = crawling.getTodayPostUrl(date)
+    if hrefValue == None:
+        # slack.sendSlackErrorMessage("오늘 포스트가 올라오지 않은 것 같아요. 홈페이지를 확인하세요", slackToken , channel)
         sys.exit()
-    isLaunch = sys.argv[1] == '0'
-
-
+    
     # 블로그에서 게시글 내 이미지들의 url을 가져옴
-    imageUrlList = crawling.getImageUrls()
+    imageUrlList = crawling.getImageUrls(hrefValue)
+    # print("imageurlList: ", imageUrlList)
     if (imageUrlList == None):
-        slack.sendSlackErrorMessage("홈페이지에서 메뉴 이미지를 불러오지 못했습니다.", slackToken , channel)
-        print("조졌네이~")
+        # slack.sendSlackErrorMessage("홈페이지에서 메뉴 이미지를 불러오지 못했습니다.", slackToken , channel)
         sys.exit()
     
-    # 마지막 이미지는 건물 소개 이미지라 삭제하였음
-    imageUrlList.pop() 
-    
-    # OCR 돌린 결과를 {date : url} 로 가져옴 
-    imageMap = imageParser.findImages(imageUrlList)
-    keyList = list(imageMap.keys())
-    foundImageUrls = []
+    # slack.sendSlackLaunchMessage(foundImageUrls[0], slackToken, channel)
 
-    print("???")
-    print(keyList)
-    if sys.argv[1] == '0':
-        for key in keyList:
-            if ("점심" in key and date1 in key):
-                foundImageUrls.append(imageMap[key])
-        if (len(foundImageUrls) != 1):
-            slack.sendSlackErrorMessage("해당 날짜의 이미지를 찾지 못했습니다.", slackToken , channel)
-            
-        slack.sendSlackLaunchMessage(foundImageUrls[0], slackToken, channel)
-
-    elif sys.argv[1] == '1':
-        for key in keyList:
-            print(key)
-            if (("저녁" in key and date1 in key) or ("점심" in key and date2 in key)):
-                foundImageUrls.append(imageMap[key])
-        if (len(foundImageUrls) != 2):
-            slack.sendSlackErrorMessage("해당 날짜의 이미지를 찾지 못했습니다. - 2개의 이미지를 찾지 못함", slackToken , channel)
-        
-        slack.sendSlackDinnerMessage(foundImageUrls[0], foundImageUrls[1], slackToken, channel)
-
-    elif sys.argv[1] == '2':
-        for key in keyList:
-            if ("점심" in key and date1 in key):
-                foundImageUrls.append(imageMap[key])
-        if (len(foundImageUrls) != 1):
-            slack.sendSlackErrorMessage("해당 날짜의 이미지를 찾지 못했습니다.", slackToken , channel)
-            
-        slack.sendSlackFridayMessage(foundImageUrls[0], slackToken, channel)
-
-    
