@@ -66,7 +66,7 @@ def sendSlackLaunchMessage(imageUrls, slackToken, channel) :
         index += 1
     
     client.chat_postMessage(channel = channel, text=message, blocks = slackBlockLaunchFormat())
-    os.system("rm -rf " + path)
+    # os.system("rm -rf " + path)
 
 def sendSlackErrorMessage(msg, slackToken, channel) :
     client = slack_sdk.WebClient(token = slackToken)
