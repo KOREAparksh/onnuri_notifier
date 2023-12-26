@@ -53,20 +53,20 @@ def sendSlackLaunchMessage(imageUrls, slackToken, channel) :
     path = sys.argv[2]
     print("path: ", path)
     client = slack_sdk.WebClient(token = slackToken)
-    os.system("mkdir -p {}/image".format(path))
+    os.system("mkdir -p {}/onnuri".format(path))
     
     # 메세지 입력
     index = 0
     message = "🤩 온누리식당 메뉴 알림!\n"
     for imageUrl in imageUrls:
-        os.system("curl " + imageUrl + " > " + "{}/image/{}.png".format(path, index))
-        image = open("{}/image/{}.png".format(path, index), 'rb')
+        os.system("curl " + imageUrl + " > " + "{}/onnuri/{}.png".format(path, index))
+        image = open("{}/onnuri/{}.png".format(path, index), 'rb')
         upload = client.files_upload(file=image)
         message += "<" + upload["file"]["permalink"] + "| >"
         index += 1
     
     client.chat_postMessage(channel = channel, text=message, blocks = slackBlockLaunchFormat())
-    # os.system("rm -rf " + path)
+    os.system("rm -rf " + "{}/onnuri".format(path))
 
 def sendSlackErrorMessage(msg, slackToken, channel) :
     client = slack_sdk.WebClient(token = slackToken)
