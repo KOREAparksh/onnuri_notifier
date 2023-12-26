@@ -15,6 +15,7 @@ import app
 def getDate() : 
     now = dt.datetime.today()
     today = now.strftime("%m월%d일")
+    return today
         
 
 if __name__ == "__main__":  

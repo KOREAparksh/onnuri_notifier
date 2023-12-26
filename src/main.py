@@ -6,15 +6,19 @@ import datetime as dt
 
 import app
 
-def getDate(argv) : 
+def getDate() : 
     now = dt.datetime.today()
     today = now.strftime("%m월%d일")
+    return today
 
 if __name__ == "__main__":  
     date1 = getDate()
     
+    print("@@@@@@@@@@@@@")
+    print(date1)
+    
     load_dotenv(verbose=True)
     slackToken = os.getenv("SLACK_TOKEN")
     channel = os.getenv("SLACK_CHANNEL")
-    app.app(slackToken, channel, date1, date2)
+    app.app(slackToken, channel, date1)
    
