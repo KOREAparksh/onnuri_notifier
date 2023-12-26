@@ -58,7 +58,7 @@ def getFirstATagHrefValue(today):
             title = title.replace(" ", "")
             title = title.strip()
             print("타이틀 값:", title)
-            if (title.find(today+"오늘의점심") != -1):
+            if (title.find(today+"오늘의점심") == -1):
                 continue
             flag = False
             aTag = div.find_element(By.TAG_NAME, 'a')
