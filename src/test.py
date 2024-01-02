@@ -14,14 +14,14 @@ import app
 
 def getDate() : 
     now = dt.datetime.today()
-    today = now.strftime("%m월%d일")
+    today = now.strftime("%-m월%-d일")
     return today
         
 
 if __name__ == "__main__":  
     date1 = getDate()
     
-    date1 = "12월22일"
+    # date1 = "01월02일"
     print("@@@@@@@@@@@@@")
     print(date1)
     
