@@ -47,10 +47,13 @@ def getFirstATagHrefValue(today):
     driver.get(url)
     hrefValue = None
     flag = True
+    print("11111111111")
     try:
         # firstATags = driver.find_elements(By.XPATH, '//div[@class="text_area___UrFH"]')
         wait = WebDriverWait(driver, 20)
-        divs = wait.until(EC.visibility_of_all_elements_located((By.XPATH, '//div[@class="text_area___UrFH"]')))
+        print("22222222222222")
+        divs = wait.until(EC.visibility_of_all_elements_located((By.XPATH, '//div[@class="text_area__mOuKZ"]')))
+        print("33333333333333")
         print("divs: ", type(divs))
         for div in divs:
             title = div.find_element(By.XPATH, '//strong[1]')
